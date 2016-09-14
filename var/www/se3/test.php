@@ -178,7 +178,13 @@ if (ldap_get_right("se3_is_admin",$login)!="Y")
         <center><TABLE border="1" width="80%"><TR><TD colspan="3" align="center" class="menuheader">
 	Version SambaEdu</TD></TR><TR><TD>Version OS</TD><TD align="center" colspan="2">
 <?php
-	if ($os=="6.0") { echo "Squeeze"; } else { echo "Wheezy"; } echo "<I> <img src=\"../elements/images/debian.png\">($os)</I></TD></TR>\n";
+	// Montrer 
+	switch ($os[0]):
+		case "7":	echo "Wheeze"; break;
+		case "8":	echo "Jessie"; break;
+		default: "Unknown or Outdated"; break;
+		
+	echo "<I> <img src=\"../elements/images/debian.png\">($os)</I></TD></TR>\n";
 ?>
 	</TD>
 	</TR>

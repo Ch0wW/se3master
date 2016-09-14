@@ -74,40 +74,11 @@ dos2unix var/cache/se3_install/scripts/*.pl
 dos2unix var/cache/se3_install/sudoscripts/*.sh
 dos2unix var/cache/se3_install/sudoscripts/*.pl
 
-# tratement utf8 pour etch 
-#if [ "$DISTRIB" == "etch" ]; then
-#	rm var/cache/se3_install/install_se3_lenny.sh
-
-#else
-#	rm var/cache/se3_install/install_se3_etch.sh
-
-#fi
-
-echo "Modif vers utf8 pour etch / Lenny"
-recode latin9..utf8 var/cache/se3_install/scripts/*.sh
-recode latin9..utf8 var/cache/se3_install/sudoscripts/*.sh
-recode latin9..utf8 var/cache/se3_install/*.sh
-
-
-
-# tratement utf8 pour etch 
-cd var/cache/se3_install/wwwse3
-# if [ "$DISTRIB" == "etch" ]; then
-# A=`find ./ -iname "*.inc" -o -iname "*.php" -o -iname "*.html" -type f`
-# 	        for FICH in $A
-# 		do
-# 			recode latin9..utf8 $FICH
-# 			echo "$FICH-->ok"
-# 		done
-# fi
-
 # Refabrication de l'archive wwwse3.tgz
 tar -czf ../wwwse3.tgz se3
 cd ..
 rm -r wwwse3
 cd ../../../..
-
-
 
 # Fabrication du paquet se3
 dpkg-deb -b build se3_$VERSION$DISTRIB\_i386.deb

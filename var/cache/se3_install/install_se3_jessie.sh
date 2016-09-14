@@ -3,7 +3,7 @@
 # **********************************************************
 # Installation de SambaEdu3
 # Auteur: Olivier LECLUSE
-# Modifiée le: 14/09/2016 par Maëllig DESMOTTES
+#
 # Ce script est distribué selon les termes de la licence GPL
 # **********************************************************
 

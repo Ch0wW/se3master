@@ -3,19 +3,9 @@
 # **********************************************************
 # Installation de SambaEdu3
 # Auteur: Olivier LECLUSE
-# Ce script est diftribué selon les termes de la licence GPL
+#
+# Ce script est distribué selon les termes de la licence GPL
 # **********************************************************
-
-# Adaptation pour lenny keyser - Mars 2010
-# Activation mode debug
-# Ajout test carte rezo != eth0
-# modif PHPINI="/etc/php5/apache2/php.ini"
-# modif conf ldap pour utiliser script mkSlapdCfonf.sh
-# LDAPGRP="root" averifier
-# modif mrtg
-# modif $INITDAPACHE
-
-#$Id: install_se3_.sh 3911 2009-05-15 07:28:41Z gnumdk $
 
 # todo
 # déplacer la section clamav dans le postinst se3-clamav
@@ -26,7 +16,6 @@ if [ -e /root/debug ]; then
 set -x
 fi
 # cp -f /etc/sudoers.se3 /etc/sudoers
-
 
 #Init annuaire et mise en place DB_CONFIG de se3
 /etc/init.d/slapd stop
