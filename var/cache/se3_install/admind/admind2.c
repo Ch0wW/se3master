@@ -21,25 +21,24 @@ compilation du binaire : gcc -o admind admind2.c
 #include <syslog.h>
 #include <sys/file.h>
 
-#define OPEN_MAX         256   /* # open files a process may have */
-#define PIDFILE		"/var/run/admind.pid"
-#define ADMIND               "/var/remote_adm/admin.sh"
-main() {
+#define OPEN_MAX		256   /* # open files a process may have */
+#define PIDFILE			"/var/run/admind.pid"
+#define ADMIND			"/var/remote_adm/admin.sh"
 
+int main() 
+{
   int fd, i;
 
-  static char ligne [128], str[12];
+  static char ligne[128], str[12];
 
-  FILE *result;
-  FILE *tbp;
-
+  FILE *result, *tbp;
+  
   openlog("admind_SE3", LOG_PERROR | LOG_PID, LOG_INFO);
   umask (022);
   chdir ("/tmp");
 
-  // Le daemon passe en arrière plan
+  // Creation d'une session en arrière plan
   if (fork() !=0) exit (EXIT_SUCCESS);
-  // Creation d'une session
   setsid();
 
   // Fermeture des descripteurs de fichiers
@@ -50,22 +49,27 @@ main() {
   // et empechant le lancement de plusieurs admind
   fd = open (PIDFILE, O_RDWR | O_CREAT,0640);
   if (fd < 0) exit (EXIT_FAILURE); // sortie car impossibilite de creer le fichier PIDFILE
+  
+  // Bloque tout autre instance
   if (lockf (fd, F_TLOCK, 0) < 0 ) {
-    syslog (LOG_INFO, "SE3 admind is running !!!\n");
-    exit(EXIT_SUCCESS);  // sortie car le fichier est deja locke par un autre process
+    syslog (LOG_INFO, "[SE3 DAEMON] CRITICAL: Daemon is already running!\n");
+    exit(EXIT_SUCCESS);
   }
-  snprintf (str, 12, "%d\n", getpid ());
+  
+  snprintf (str, sizeof(str), "%d\n", getpid ());
   write (fd, str, strlen (str));
 
   // Message syslog d'information de demarrage du daemon
-  syslog (LOG_INFO, "Starting SE3 admin daemon...\n");
+  syslog (LOG_INFO, "[SE3 DAEMON] Starting Admin daemon...\n");
 
-  while(1) {
+  while(1) 
+  {
     tbp = fopen(ADMIND,"r");
+	
     if (tbp != NULL) {
       fclose(tbp);
-      // Analyse syntaxique du script admin.sh
-      // A FAIRE !!
+      
+	  // ToDo: Analyse syntaxique du script admin.sh
 
       // Execution de la tache d'administration
       result = popen (ADMIND,"r");

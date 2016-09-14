@@ -3,19 +3,9 @@
 # **********************************************************
 # Installation de SambaEdu3
 # Auteur: Olivier LECLUSE
-# Ce script est diftribué selon les termes de la licence GPL
+# Modifiée le: 14/09/2016 par Maëllig DESMOTTES
+# Ce script est distribué selon les termes de la licence GPL
 # **********************************************************
-
-# Adaptation pour lenny keyser - Mars 2010
-# Activation mode debug
-# Ajout test carte rezo != eth0
-# modif PHPINI="/etc/php5/apache2/php.ini"
-# modif conf ldap pour utiliser script mkSlapdCfonf.sh
-# LDAPGRP="root" averifier
-# modif mrtg
-# modif $INITDAPACHE
-
-#$Id: install_se3_.sh 3911 2009-05-15 07:28:41Z gnumdk $
 
 # todo
 # déplacer la section clamav dans le postinst se3-clamav
@@ -26,7 +16,6 @@ if [ -e /root/debug ]; then
 set -x
 fi
 # cp -f /etc/sudoers.se3 /etc/sudoers
-
 
 #Init annuaire et mise en place DB_CONFIG de se3
 /etc/init.d/slapd stop
@@ -112,7 +101,7 @@ echo "Détection de la distribution:"
 
 if [ -e /etc/debian_version ]; then
 	echo -e "$COLINFO\c "
-	echo "Debian détectée, félicitation ;-)"
+	echo "Utilisation de Debian confirmée."
 	echo -e "$COLCMD\c "
 	DISTRIB="DEB"
 	WWWPATH="/var/www"
@@ -148,12 +137,6 @@ fi
 DEBVER=`cat /etc/debian_version`
 echo -e "$COLINFO\c "
 case $DEBVER in
-    5.0*)
-	echo "Debian lenny detectee."
-	;;
-    6.0*)
-	echo "Debian squeeze detectee."
-	;;
     7.*)
 	echo "Debian wheezy detectee."
 	;;
@@ -161,18 +144,14 @@ case $DEBVER in
 	echo "Debian jessie detectee."
 	;;
    *)
-	echo "Version Debian inconnue"
+	echo "Version non reconnue de Debian."
 	;;
 esac
-#if [ "$DEBVER" = "5.0.4" ]; then
-#	echo "Debian lenny détectée."
-#fi
-
 
 ################# Detection de la disquette de conf auto ############
 
 if [ -e /etc/se3/setup_se3.data ]; then
-	echo -e "${COLTXT}Un script de configuration automatique a été détecté .... ;) "
+	echo -e "${COLTXT}Un script de configuration automatique a été détecté."
 	chmod 700 /etc/se3/setup_se3.data
 	. /etc/se3/setup_se3.data # le "." permet d'inclure le script et ses variables
 	# correction pass mysql
@@ -180,11 +159,6 @@ if [ -e /etc/se3/setup_se3.data ]; then
 else
 	[ ! -d /etc/se3 ] && mkdir /etc/se3
 fi
-
-# // il n'y a pas de depots volatile sous squeeze //
-## correction sources.list si besoin pour se3-clamav
-#[ -z "$(cat /etc/apt/sources.list| grep "clamav derniere version")" ] && echo "# entree pour clamav derniere version
-#deb http://ftp2.de.debian.org/debian-volatile lenny/volatile main" >> /etc/apt/sources.list
 
 #
 # Mise en place de l'interface web
@@ -435,9 +409,9 @@ if [ ! "$rep" = "n" ]; then
 					do
 						echo -e "$COLINFO\c "
 						echo -e "Vous avez demandé à installer le serveur ldap sur une machine distante."
-						echo -e "IL EST INDISPENSABLE QUE LA MACHINE DISTANTE SOIT SOUS DEBIAN LENNY OU QUE L'ANNUAIRE" 
+						echo -e "IL EST INDISPENSABLE QUE LA MACHINE DISTANTE SOIT SOUS DEBIAN 7 MINIMUM OU QUE L'ANNUAIRE" 
 						echo -e "DISTANT SOIT AU FORMAT SCHEMA CHECK ON POUR QUE L'INSTALLATION ABOUTISSE !"
-						echo -e "par exemple LCS LENNY répond à ce prérequis" 
+						echo -e ""
 						echo -e "Dans le doute, il est vivement recommandé de laisser l'annuaire en local"
 						echo -e "Etes vous certain de vouloir conserver  votre choix ? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c "
 						read REP_CONFIRM 
@@ -685,10 +659,7 @@ else
 		exit 1
 	fi
 
-	#
 	# Paramétrage du serveur LDAP sur le serveur SE3
-	#
-
 	echo -e "$COLPARTIE"
 	echo "Section 3: "
 	echo "---------- "
@@ -953,17 +924,12 @@ fi
 	echo -e "$COLCMD\c "
 	[ -f /etc/init.d/cupsys ] && /etc/init.d/cupsys restart
 	[ -f /etc/init.d/cups ] && /etc/init.d/cups restart
-
-	# install trombine
-
-  #
- 
-  # Génération clé rsa root
+	
+	# Génération clé rsa root
 	if [ ! -e /root/.ssh/id_rsa.pub ]; then
 	    ssh-keygen -t rsa -N "" -f /root/.ssh/id_rsa -q
 	fi
 	cp /root/.ssh/id_rsa.pub /var/se3/Progs/install/installdll
-  
 	
 fi
 
@@ -1139,7 +1105,6 @@ fi
 
 ### remise en place des droits par défaut
 /usr/share/se3/scripts/permse3
-
 
 # actualisation du cache des parametres : 
 /usr/share/se3/includes/config.inc.sh -clpbmsdf 

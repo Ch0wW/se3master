@@ -1,7 +1,4 @@
 #!/bin/bash
-#shares_Win95: drivers, Progs
-#shares_Win2K: drivers, Progs
-#shares_WinXP: drivers, Progs
 #shares_Vista: drivers, Progs
 #shares_Seven: drivers, Progs
 #action: start

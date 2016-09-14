@@ -1,7 +1,4 @@
 #!/bin/bash
-#shares_Win95: homes
-#shares_Win2K: homes
-#shares_WinXP: homes
 #shares_Vista: homes
 #shares_Seven: homes
 #action: stop
